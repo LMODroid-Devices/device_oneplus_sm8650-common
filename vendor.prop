@@ -203,7 +203,7 @@ vendor.display.enable_early_wakeup=1
 vendor.display.enable_fb_scaling=1
 vendor.display.enable_hdr10_gpu_target=0
 vendor.display.enable_optimize_refresh=0
-vendor.display.enable_rc_support=0
+vendor.display.enable_rc_support=1
 vendor.display.enable_rounded_corner=1
 vendor.display.force_lm_to_fb_config=1
 vendor.display.force_tonemapping=1
@@ -233,9 +233,8 @@ vendor.gatekeeper.disable_spu=true
 vendor.gatekeeper.is_security_level_spu=0
 
 # Graphics
-debug.egl.hw=0
-debug.sf.auto_latch_unsignaled=1
-debug.sf.disable_client_composition_cache=1
+debug.sf.auto_latch_unsignaled=0
+debug.sf.disable_client_composition_cache=0
 debug.sf.early.app.duration=13666666
 debug.sf.earlyGl.app.duration=13666666
 debug.sf.earlyGl.sf.duration=10500000
@@ -243,8 +242,7 @@ debug.sf.early.sf.duration=10500000
 debug.sf.enable_advanced_sf_phase_offset=1
 debug.sf.enable_gl_backpressure=1
 debug.sf.enable_hwc_vds=0
-debug.sf.hw=0
-debug.sf.latch_unsignaled=1
+debug.sf.latch_unsignaled=0
 debug.sf.late.app.duration=13666666
 debug.sf.late.sf.duration=10500000
 debug.sf.predict_hwc_composition_strategy=0
@@ -280,9 +278,6 @@ debug.c2.use_dmabufheaps=1
 debug.stagefright.c2inputsurface=-1
 media.stagefright.audio.deep=false
 vendor.media.omx=0
-
-# Netflix
-ro.netflix.bsp_rev=Q8650-37577-1
 
 # Pasr
 vendor.pasr.activemode.enabled=true
