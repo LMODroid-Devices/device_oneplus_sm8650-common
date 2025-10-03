@@ -27,9 +27,11 @@ PRODUCT_PACKAGES += \
     otapreopt_script
 
 # Alert slider
+ifneq ($(TARGET_IS_TABLET),true)
 PRODUCT_PACKAGES += \
     KeyHandler \
     tri-state-key-calibrate
+endif
 
 # Audio
 PRODUCT_PACKAGES += \
@@ -62,18 +64,22 @@ PRODUCT_PACKAGES += \
 AUDIO_HAL_DIR := hardware/qcom-caf/sm8650/audio/primary-hal
 CONFIG_HAL_SRC_DIR := $(AUDIO_HAL_DIR)/configs/pineapple
 CONFIG_PAL_SRC_DIR := $(AUDIO_HAL_DIR)/../pal/configs/pineapple
+QCV_FAMILY_SKUS := pineapple cliffs
+
+PRODUCT_COPY_FILES += \
+$(foreach DEVICE_SKU, $(QCV_FAMILY_SKUS), \
+    $(CONFIG_HAL_SRC_DIR)/audio_effects.conf:$(TARGET_COPY_OUT_VENDOR)/etc/audio/sku_$(DEVICE_SKU)/audio_effects.conf \
+    $(CONFIG_HAL_SRC_DIR)/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/sku_$(DEVICE_SKU)/audio_effects.xml \
+    $(LOCAL_PATH)/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/sku_$(DEVICE_SKU)/audio_policy_configuration.xml)
 
 PRODUCT_COPY_FILES += \
     $(AUDIO_HAL_DIR)/configs/common/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
-    $(CONFIG_HAL_SRC_DIR)/audio_effects.conf:$(TARGET_COPY_OUT_VENDOR)/etc/audio/sku_pineapple/audio_effects.conf \
-    $(CONFIG_HAL_SRC_DIR)/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/sku_pineapple/audio_effects.xml \
     $(CONFIG_PAL_SRC_DIR)/card-defs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/card-defs.xml \
     $(CONFIG_HAL_SRC_DIR)/microphone_characteristics.xml:$(TARGET_COPY_OUT_VENDOR)/etc/microphone_characteristics.xml \
     $(CONFIG_PAL_SRC_DIR)/Hapticsconfig.xml:$(TARGET_COPY_OUT_VENDOR)/etc/Hapticsconfig.xml \
     $(CONFIG_PAL_SRC_DIR)/usecaseKvManager.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usecaseKvManager.xml
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/audio_policy_configuration.xml \
     $(LOCAL_PATH)/audio/usbv2_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usbv2_audio_policy_configuration.xml
 
 PRODUCT_COPY_FILES += \
@@ -107,8 +113,10 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.raw.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.raw.xml
 
 # Context Hub
+ifneq ($(TARGET_IS_TABLET),true)
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.context_hub.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/android.hardware.context_hub.xml
+endif
 
 # Dalvik
 $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
@@ -133,8 +141,10 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml
 
 # Doze
+ifneq ($(TARGET_IS_TABLET),true)
 PRODUCT_PACKAGES += \
     OplusDoze
+endif
 
 # DRM
 PRODUCT_PACKAGES += \
@@ -149,6 +159,7 @@ PRODUCT_PACKAGES += \
     fastbootd
 
 # Fingerprint
+ifneq ($(TARGET_IS_TABLET),true)
 PRODUCT_PACKAGES += \
     IFAAService
 
@@ -156,13 +167,16 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.fingerprint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.fingerprint.xml
 
 $(call soong_config_set,surfaceflinger,udfps_lib,//hardware/oplus:libudfps_extension.oplus)
+endif
 
 # GPS
+ifneq ($(TARGET_IS_TABLET),true)
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/gps.conf:$(TARGET_COPY_OUT_ODM)/etc/gps.conf
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.location.gps.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.location.gps.xml
+endif
 
 # Graphics
 PRODUCT_COPY_FILES += \
@@ -184,24 +198,28 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/privapp-permissions-hotword.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-hotword.xml
 
 # IPACM
+ifneq ($(TARGET_IS_TABLET),true)
 PRODUCT_PACKAGES += \
     ipacm \
     IPACM_cfg.xml \
     IPACM_Filter_cfg.xml
+endif
 
 # IR Blaster
+ifneq ($(TARGET_IS_TABLET),true)
 PRODUCT_PACKAGES += \
-    android.hardware.ir-service.oplus \
-    consumerir.default
+    android.hardware.ir-service.oplus
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.consumerir.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/android.hardware.consumerir.xml
+endif
 
 # Init
 PRODUCT_PACKAGES += \
     fstab.qcom \
     fstab.qcom.vendor_ramdisk \
     init.class_main.sh \
+    init.kernel.post_boot-cliffs_default_3_4_1.sh \
     init.kernel.post_boot-pineapple.sh \
     init.kernel.post_boot-pineapple_default_2_3_2_1.sh \
     init.oplus.rc \
@@ -254,6 +272,7 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.memtrack-service
 
 # NFC
+ifneq ($(TARGET_IS_TABLET),true)
 PRODUCT_PACKAGES += \
     android.hardware.nfc-service.nxp \
     com.android.nfc_extras \
@@ -268,6 +287,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.se.omapi.uicc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.se.omapi.uicc.xml \
     frameworks/native/data/etc/com.android.nfc_extras.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/com.android.nfc_extras.xml \
     frameworks/native/data/etc/com.nxp.mifare.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/com.nxp.mifare.xml
+endif
 
 # OPlus dummy services
 PRODUCT_PACKAGES += \
@@ -283,13 +303,17 @@ DEVICE_PACKAGE_OVERLAYS += \
 
 PRODUCT_ENFORCE_RRO_TARGETS := *
 PRODUCT_PACKAGES += \
-    CarrierConfigResCommon \
     FrameworksResTarget \
     NcmTetheringOverlay \
     OPlusFrameworksResCommon \
     OPlusSettingsResCommon \
     OPlusSystemUIResCommon \
     WifiResTarget
+
+ifneq ($(TARGET_IS_TABLET),true)
+PRODUCT_PACKAGES += \
+    CarrierConfigResCommon
+endif
 
 # Partitions
 PRODUCT_PACKAGES += \
@@ -315,6 +339,7 @@ PRODUCT_PACKAGES += \
     vendor.qti.qspa-service
 
 # SecureElement
+ifneq ($(TARGET_IS_TABLET),true)
 PRODUCT_PACKAGES += \
     SecureElementResTarget_Vendor
 
@@ -327,6 +352,7 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.se.omapi.uicc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.se.omapi.uicc.xml
+endif
 
 # Sensors
 PRODUCT_PACKAGES += \
@@ -346,10 +372,14 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.gyroscope.xml \
     frameworks/native/data/etc/android.hardware.sensor.hifi_sensors.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.hifi_sensors.xml \
     frameworks/native/data/etc/android.hardware.sensor.light.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.light.xml \
-    frameworks/native/data/etc/android.hardware.sensor.proximity.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.proximity.xml \
     frameworks/native/data/etc/android.hardware.sensor.relative_humidity.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.relative_humidity.xml \
     frameworks/native/data/etc/android.hardware.sensor.stepcounter.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepcounter.xml \
     frameworks/native/data/etc/android.hardware.sensor.stepdetector.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepdetector.xml
+
+ifneq ($(TARGET_IS_TABLET),true)
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.sensor.proximity.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.proximity.xml
+endif
 
 # Shipping API
 BOARD_SHIPPING_API_LEVEL := 34
@@ -364,6 +394,7 @@ PRODUCT_SOONG_NAMESPACES += \
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
 # Telephony
+ifneq ($(TARGET_IS_TABLET),true)
 PRODUCT_PACKAGES += \
     extphonelib \
     extphonelib-product \
@@ -389,21 +420,26 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.cdma.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.cdma.xml \
     frameworks/native/data/etc/android.hardware.telephony.gsm.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.gsm.xml \
     frameworks/native/data/etc/android.hardware.telephony.ims.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.ims.xml \
-    frameworks/native/data/etc/android.hardware.telephony.mbms.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.mbms.xml \
-    frameworks/native/data/etc/android.software.sip.voip.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.sip.voip.xml
+    frameworks/native/data/etc/android.hardware.telephony.mbms.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.mbms.xml
 
 $(call inherit-product, hardware/oplus/oplus-fwk/oplus-fwk.mk)
+endif
+
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.software.sip.voip.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.sip.voip.xml
 
 # Thermal
 PRODUCT_PACKAGES += \
     android.hardware.thermal-service.qti
 
 # Touch
+ifneq ($(TARGET_IS_TABLET),true)
 PRODUCT_PACKAGES += \
     vendor.lineage.touch-service.oplus
 
 $(call soong_config_set,OPLUS_LINEAGE_TOUCH_HAL,INCLUDE_DIR,$(LOCAL_PATH)/touch/include)
 $(call soong_config_set,OPLUS_LINEAGE_TOUCH_HAL,USE_OPLUSTOUCH,true)
+endif
 
 # Virtualization service
 $(call inherit-product, packages/modules/Virtualization/apex/product_packages.mk)
@@ -441,11 +477,10 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.verified_boot.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.verified_boot.xml
 
 # Vibrator
-PRODUCT_PACKAGES += \
-    vendor.qti.hardware.vibrator.service.oplus
-
+ifneq ($(TARGET_IS_TABLET),true)
 PRODUCT_COPY_FILES += \
     vendor/qcom/opensource/vibrator/excluded-input-devices.xml:$(TARGET_COPY_OUT_VENDOR)/etc/excluded-input-devices.xml
+endif
 
 # VINTF
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
@@ -457,11 +492,15 @@ DEVICE_MATRIX_FILE := hardware/qcom-caf/common/compatibility_matrix.xml
 DEVICE_MANIFEST_FILE := \
     $(AUDIO_HAL_DIR)/configs/common/manifest_non_qmaa.xml \
     $(AUDIO_HAL_DIR)/configs/common/manifest_non_qmaa_extn.xml \
-    $(LOCAL_PATH)/manifest_pineapple.xml \
+    $(LOCAL_PATH)/manifest_pineapple.xml
+
+ifneq ($(TARGET_IS_TABLET),true)
+DEVICE_MANIFEST_FILE += \
     $(LOCAL_PATH)/network_manifest.xml
 
 ODM_MANIFEST_FILES := \
     $(LOCAL_PATH)/network_manifest_odm.xml
+endif
 
 # WiFi
 PRODUCT_PACKAGES += \
@@ -482,9 +521,7 @@ PRODUCT_COPY_FILES += \
 
 # WiFi firmware symlinks
 PRODUCT_PACKAGES += \
-    firmware_wlanmdsp.otaupdate_symlink \
-    firmware_wlan_mac.bin_symlink \
-    firmware_WCNSS_qcom_cfg.ini_symlink
+    firmware_wlanmdsp.otaupdate_symlink
 
 # Inherit from the proprietary files makefile.
 $(call inherit-product, vendor/oneplus/sm8650-common/sm8650-common-vendor.mk)
